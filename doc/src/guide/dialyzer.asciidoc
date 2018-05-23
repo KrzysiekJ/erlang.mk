@@ -41,11 +41,23 @@ The `PLT_APPS` variable can be used to add additional
 applications to the PLT. You can either list application
 names or paths to these applications.
 
-Erlang.mk defines two variables for specifying options
-for the analysis: `DIALYZER_DIRS` and `DIALYZER_OPTS`.
-The former one defines which directories should be part
-of the analysis. The latter defines what extra warnings
-Dialyzer should report.
+Erlang.mk defines two variables for specifying options for the
+analysis: `DIALYZER_OPTS` and `DIALYZER_TARGET_OPTS`. The former is
+intended to contain general Dialyzer options and by default defines
+some extra warnings to report. The latter contains options for
+specifying target files. For example, if you want to analyze BEAM
+files from the `ebin/` directory, you can use:
+
+[source,make]
+DIALYZER_TARGET_OPTS = ebin
+
+To analyze source files from the `src/` and `test/` directories, use:
+
+[source,make]
+DIALYZER_TARGET_OPTS = --src src test
+
+If you want to add directories recursively, prepend a list of
+directories with the `-r` parameter.
 
 Note that Erlang.mk enables the race condition warnings
 by default. As it can take considerably large resources

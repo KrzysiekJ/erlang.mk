@@ -109,7 +109,7 @@ dialyzer-beam: build clean
 	$t echo "ERLC_OPTS += +'{parse_transform, lager_transform}'" >> $(APP)/Makefile
 
 	$i "Make Dialyzer use the beam files"
-	$t echo "DIALYZER_DIRS = -r ebin" >> $(APP)/Makefile
+	$t echo "DIALYZER_TARGET_OPTS = -r ebin" >> $(APP)/Makefile
 
 	$i "Create a module that calls lager"
 	$t printf "%s\n" \

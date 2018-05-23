@@ -9,7 +9,12 @@ DIALYZER_PLT ?= $(CURDIR)/.$(PROJECT).plt
 export DIALYZER_PLT
 
 PLT_APPS ?=
-DIALYZER_DIRS ?= --src -r $(wildcard src) $(ALL_APPS_DIRS)
+ifeq ($(DIALYZER_DIRS),)
+	DIALYZER_TARGET_OPTS ?= --src -r $(wildcard src) $(ALL_APPS_DIRS)
+else
+	$(warning DIALYZER_DIRS is deprecated, use DIALYZER_TARGET_OPTS instead.)
+	DIALYZER_TARGET_OPTS = $(DIALYZER_DIRS)
+endif
 DIALYZER_OPTS ?= -Werror_handling -Wrace_conditions -Wunmatched_returns # -Wunderspecs
 DIALYZER_PLT_OPTS ?=
 
@@ -58,4 +63,4 @@ dialyze:
 else
 dialyze: $(DIALYZER_PLT)
 endif
-	$(verbose) dialyzer --no_native `$(ERL) -eval "$(subst $(newline),,$(call escape_dquotes,$(call filter_opts.erl)))" -extra $(ERLC_OPTS)` $(DIALYZER_DIRS) $(DIALYZER_OPTS)
+	$(verbose) dialyzer --no_native `$(ERL) -eval "$(subst $(newline),,$(call escape_dquotes,$(call filter_opts.erl)))" -extra $(ERLC_OPTS)` $(DIALYZER_TARGET_OPTS) $(DIALYZER_OPTS)
